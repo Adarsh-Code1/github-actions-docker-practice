@@ -32,13 +32,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1 .
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1 ghcr.io/adarsh-code1/github-actions-docker-practice:v1
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/docker-github-actions:v1 .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/docker-github-actions:v1 ghcr.io/adarsh-code1/docker-github-actions:v1
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/docker-github-actions:v1
 
       - name: Push Docker image to GitHub Packages
         run: |
-          docker push ghcr.io/adarsh-code1/github-actions-docker-practice:v1
+          docker push ghcr.io/adarsh-code1/docker-github-actions:v1
