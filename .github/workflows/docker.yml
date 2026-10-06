@@ -9,6 +9,10 @@ jobs:
   docker-build-push:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,8 +23,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1 .
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1 .
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1 ghcr.io/adarsh-code1/github-actions-docker-practice:v1
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-docker-practice:v1
+
+      - name: Push Docker image to GitHub Packages
+        run: |
+          docker push ghcr.io/adarsh-code1/github-actions-docker-practice:v1
